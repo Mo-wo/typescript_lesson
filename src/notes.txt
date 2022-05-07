@@ -1,0 +1,133 @@
+USING TYPESCRIPT
+- Install node.js
+- Install typescript compiler npm install -g typescript
+- To compile typescript file: tsc filename.ts or tsc.cmd filename.ts
+- To watch typescript file for changes: tsc filename -w
+- For large projects with files in different directories:
+    tsc --init
+    -This will create a tsconfig file which can be used to control the output of the compiled ts file by setting the root directory filepath to that of the ts file in the src folder and the output directory filepath to that of the public folder in the tsconfig file.
+    - Add "include": ["src"] to the tsconfig file to ensure that TS compliler does not compile any ts files outside the source folder to the public folder
+
+FOLDER STRUCTURE
+-Public Folder - contains all files that will be deployed such as: compiled JS file, index.html, and css files.
+
+Src folder - contains all source files that will not be deployed such as the typescript file(s)
+
+TYPESCRIPT
+- Is a programming language which can be used as an alternative to JS.
+
+- Is a superset of JS, extends JS with new features and syntax. It can do all the same thing that JS can do.
+
+- Has to be compiled to JS in other for the browser to understand. Easy to compile
+
+- Allows us to use strict types. 
+    - Makes error checking and debugging easier, allowing us to write cleaner and better code. 
+    - Errors are caught on the fly during development.
+    - Typescript infers the type of a variable based on its value.
+    - The type of a variable can also be explicitly declared.
+    - The type of value a function’s parameter should have can be declared explicitly.
+    - Arrays declared with a certain type cannot have values of other types added to it. To do have an array of mixed types, it has to be declared with those types.
+    - Properties in objects declared to be a specific type cannot be changed to another type.
+    - Variables declared as object or an array cannot be reassigned another value other than an object or an array.
+    - Additional properties cannot be added objects after declaration. It can be overridden though by reassigning the variable to another object with the exact same structure, number, type and name of properties of the previous properties. The value of the properties can change though but with the same type.
+
+- The type of variable (parameter) can be explicitly stated with:
+    - variable/parameterNname: type
+    - arrayName: type = [] (to set it to an empty string at initialisation else array methods e.g. push and pop etc. will not work on the array).
+    - objectName: object -- an object literal or an array can then be assigned to the variable in future.
+    - functionExpressionName: Function (with a capital letter)
+        Optional/Default parameters in functions should be entered last:
+        Syntax:
+            (param? : type(s)) => {}; ---- optional parameter
+            (param? : type(s) = defaultValue) => {}; ---- default parameter
+        - When a function has a return value, if the value is being assigned to a variable or used in another expression, typescript infers the type of the return value from the function.
+        - The type of a return value can be explicitly stated by:
+            (param? : type(s) = defaultValue): returnType => {}; ---- default parameter
+    
+    - To explicitly state the type of an object literal's property
+        objectName: {
+            property1: type,
+            property2: type,
+            ...
+            propertyN: type
+        } (Note: The structure (name, number and type of value declared can be assigned))
+    - Union types are used to declare a variable of different types. Ex: to initialise an array that will be used to store different types of values, the syntax will be:
+        arrayName: (type1|type2|type3...|typeN)[] = []
+        variableName: type1|type2|...typeN (no use of parantheses)
+        Note: Values of the variable can only be of the types in the declaration.
+    - To make TS behave like JS, use any type:
+        variableName: any; (This is not advised)
+
+- Support modern features (arrow functions, let, const)
+
+- Extra features (generics, interfaces, tuples etc.)
+
+TYPE ALIASES
+- Used to reduce duplication when we have complex parameters to pass into a function.
+Ex:
+    const logDetails = (user : {name: string|number, uid: StringOrNum}) => {
+        console.log(`${user.name} says hello`);
+    };
+
+    can be written with type aliases as:
+
+    const logDetails = (user : objWithName) => {
+        console.log(`${user.name} says hello`);
+    }; 
+
+    by declaring the types before hand like this:
+    type StringOrNum = string|number
+    type objWithName = {name: string, uid: StringOrNum}
+
+FUNCTION SIGNATURE
+- Used to describe the general structure of a function type.
+EX:
+    let calc = (a: number, b:number, c:string) => number;
+
+    This means that the calc variable has a type of function and the function will take 3 arguments, where the first parameter has a type of number, the second parameter has a type of number, the third parameter has a type of string, and the function returns a value that has a type of number.
+
+DOM INTERACTION
+-Typescript during development does not have access to the html file. Hence, when grabbing elements from the html file an exclamation mark is added to confirm that the element does exist in the html file and its properties can be accessed.
+    Ex:
+        const anchor = document.querySelector('a')!;
+        
+        or use runtime check:
+
+         if (anchor){
+             console.log(anchor.href);
+         }
+
+- Due to the reason above, when grabbing element from the html file using class name the 'as HTML<element>' is used to enable typescript know the type of element that class is attached to. This is called typecasting. This comes in handy when there is more than one type of that HTML element.
+
+CLASSES
+- Is a blueprint that describes an object in a non-specific way.
+- All properties of classes are public by default. To restrict the acces to these properties, access modifiers can be used on the properties.
+    - Types of Access Modifiers
+        1. public: default value of properties in classes. makes the class properties readable/accessible within and outside the class.
+        2. private: makes the property only accessible and modifiable within the class scope and cannot be accessed directly outside the class.
+        3. readonly: makes the property readable/accessible within and outside the class but cannot be modified within or outside the class.
+
+MODULES
+- Modules are used to structure project files and enable imports and exports e.g a module for all DOM interactions, another for db interactions, another for authentictions etc.
+- To use modules in typescript, change the value of the module property in the tsconfig file to es2015.
+- Also change the type attribute in the HTML script tag to module.
+    - Drawbacks of Using Modules
+        1. Only modern browsers support the module feature of ES6.
+        2. Our code is not bundled into one file, the browser uses the modules system to load the files separatley and make multiple requests.
+
+    - To tackle the drawbacks outlined, webpack can be used to bundle the files into one file after compiling. This makes the browser make only one network request and this supported by all browsers.
+
+INTERFACE
+- Can be used in typescript but not in JS    
+- It allows the enforcement of a certain structure for a class or an object.
+- It can be used to describe what properties, methods, return values; and the types that properties, methods and return values a class/object should have.
+- It differs from a class because it cannot be used to create new objects based on the interface. It is only used to enforce a certain type of structure within a class or an object.
+
+GENERICS
+- Allows for the creation of reusable blocks of code that can be used with different types.
+
+ENUMS
+- A special type in TS which allows the storage of a set of descriptive constants or keywords and associate them with numeric values.
+
+TUPLES
+- A built-in TS type like arrays except that they have the positions of data in them fixed once it has been initialised. 
